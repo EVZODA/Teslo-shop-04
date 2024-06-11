@@ -1,3 +1,5 @@
+
+
 import type { CartProduct } from "@/interfaces"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
@@ -16,6 +18,8 @@ interface State {
     addProductToCart: (product: CartProduct) => void
     updateProductQuantity: (product: CartProduct, quantity: number) => void
     removeProduct: (product: CartProduct) => void
+
+    clearCart: () => void
 
 
 
@@ -42,10 +46,13 @@ export const useCartStore = create<State>()(
             getSummaryInformation: () => {
                 const { cart } = get();
 
-                const subTotal = cart.reduce(
-                    (subTotal, product) => product.quantity * product.price + subTotal,
+
+
+
+                const subTotal = cart.reduce((subTotal, product) => (product.quantity * product.price) + subTotal,
                     0
                 );
+
                 const tax = subTotal * 0.15;
                 const total = subTotal + tax;
                 const itemsInCart = cart.reduce(
@@ -53,7 +60,7 @@ export const useCartStore = create<State>()(
                     0
                 );
 
-                console.log(subTotal)
+
 
                 return {
                     subTotal,
@@ -61,6 +68,7 @@ export const useCartStore = create<State>()(
                     total,
                     itemsInCart,
                 }
+
             },
 
             addProductToCart: (product: CartProduct) => {
@@ -72,6 +80,7 @@ export const useCartStore = create<State>()(
 
                 if (!productInCart) {
                     set({ cart: [...cart, product] })
+                    console.log(cart)
                     return
                 }
 
@@ -86,6 +95,8 @@ export const useCartStore = create<State>()(
 
                 })
                 set({ cart: updatedCartProducts })
+
+
             },
 
             updateProductQuantity: (product: CartProduct, quantity: number) => {
@@ -113,6 +124,10 @@ export const useCartStore = create<State>()(
                 set({ cart: removeProduct })
 
 
+            },
+
+            clearCart: () => {
+                set({ cart: [] })
             }
 
         })

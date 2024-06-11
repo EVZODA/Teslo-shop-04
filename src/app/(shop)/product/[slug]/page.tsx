@@ -3,7 +3,7 @@ export const revalidate = 6004800;  // 7 dias
 
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
-import { MobileSlideShow, QuantitySelector, SizeSelector, SlideShow, StockLabel } from "@/components";
+import { MobileSlideShow, SlideShow, StockLabel } from "@/components";
 import { getProductBySlug } from "@/actions";
 import { Metadata, ResolvingMetadata } from "next";
 import { AddToCart } from "./ui/AddToCart";
@@ -44,7 +44,7 @@ export async function generateMetadata(
 
 
 
-// eslint-disable-next-line import/no-anonymous-default-export
+
 export default async function ProductBySlugPage({ params }: Props) {
 
   const { slug } = params

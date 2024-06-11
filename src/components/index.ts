@@ -4,6 +4,10 @@
 export * from "./product/quantity-selector/QuantitySelector"
 export * from "./product/size-selector/SizeSelector"
 
+export * from "./paypal/PayPalButton"
+
+export * from "./providers/Providers"
+
 export * from "./product/slideShow/MobileSlideShow"
 export * from "./product/slideShow/SlideShow"
 

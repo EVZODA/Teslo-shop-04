@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react"
 import { titleFont } from "@/config/fonts"
-import { getStockBySlug } from "@/actions/products/get-stock-by-slug"
+import { getStockBySlug } from "@/actions/product/get-stock-by-slug"
 
 
 interface Props {

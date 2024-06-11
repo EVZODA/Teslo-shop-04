@@ -5,6 +5,7 @@ import {Title } from "@/components";
 import { redirect } from "next/navigation";
 import { ProductsInCart } from "./ui/ProductsInCart";
 import { OrderSummary } from "./ui/OrderSummary";
+import { useCartStore } from "@/store";
 
 
 
@@ -12,7 +13,9 @@ import { OrderSummary } from "./ui/OrderSummary";
 export default function CartPage () {
 
 
-  // redirect('/empty')
+  
+
+  
 
 
   return (
