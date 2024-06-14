@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { IoCardOutline } from "react-icons/io5";
-import clsx from "clsx";
 
 import { currencyFormat } from '../../../../utils/currencyFormat';
+
 import { getOrderById } from "@/actions/order/get-order-by-id";
 import { PayPalButton, Title } from "@/components";
+import { OrderStatus } from "@/components/orders/OrderStatus";
 
 
 
@@ -17,16 +17,16 @@ interface Props {
   }
 }
 
-export default async function OrderByIdPage ({ params }: Props) {
+export default async function OrderByIdPage({ params }: Props) {
 
   const { id } = params
 
-  const {ok, order} = await getOrderById(id)
+  const { ok, order } = await getOrderById(id)
 
   if (!ok) {
     redirect('/')
   }
- 
+
   const address = order!.OrderAddress
 
 
@@ -37,31 +37,14 @@ export default async function OrderByIdPage ({ params }: Props) {
 
       <div className=" flex flex-col w-[1000px]">
 
-        <Title title={`orden #${id.slice(3,20)}`} />
+        <Title title={`orden #${id.slice(3, 20)}`} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
 
           {/*Carrito*/}
           <div className="flex flex-col mt-5">
 
-            <div className={
-              clsx(
-                "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
-                {
-                  'bg-red-500': !order!.isPaid,
-                  'bg-green-700': order!.isPaid
-                }
-              )
-            }>
-
-              <IoCardOutline size={30} />
-              {/* <span className="mx-2">Pendiente de pago</span> */}
-              <span className="mx-2">
-                {order!.isPaid ? 'Pagada' : 'No pagada'}
-              </span>
-
-            </div>
-
+            <OrderStatus isPaid={order?.isPaid ?? false} />
 
 
             {/*Items del carrito*/}
@@ -108,14 +91,14 @@ export default async function OrderByIdPage ({ params }: Props) {
 
             <h2 className="text-2xl mb-2 font-bold">Direccion de entrega</h2>
             <div>
-            <p className="text-xl">
-                    {address!.firstName} {address!.lastName}
-                </p>
-                <p>{address!.address}</p>
-                <p>{address!.address2}</p>
-                <p>{address!.city}, {address!.countryId}</p>
-                <p>{address!.postalCode}</p>
-                <p>{address!.phone}</p>
+              <p className="text-xl">
+                {address!.firstName} {address!.lastName}
+              </p>
+              <p>{address!.address}</p>
+              <p>{address!.address2}</p>
+              <p>{address!.city}, {address!.countryId}</p>
+              <p>{address!.postalCode}</p>
+              <p>{address!.phone}</p>
             </div>
 
             <div className="w-full h-[0-5px] rounded bg-gray-200 mb-10" />
@@ -126,23 +109,30 @@ export default async function OrderByIdPage ({ params }: Props) {
 
             <div className="grid grid-cols-2">
 
-            <span>No. productos</span>
-                <span className="text-right">{order!.itemsInOrder === 1 ? '1 articulo' : `${order!.itemsInOrder } articulos`}</span>
+              <span>No. productos</span>
+              <span className="text-right">{order!.itemsInOrder === 1 ? '1 articulo' : `${order!.itemsInOrder} articulos`}</span>
 
-                <span>Subtotal</span>
-                <span className="text-right">{currencyFormat(order!.subTotal!)}</span>
+              <span>Subtotal</span>
+              <span className="text-right">{currencyFormat(order!.subTotal!)}</span>
 
-                <span>Impuestos (15%)</span>
-                <span className="text-right">{currencyFormat(order!.tax!)}</span>
+              <span>Impuestos (15%)</span>
+              <span className="text-right">{currencyFormat(order!.tax!)}</span>
 
-                <span className="mt-5 text-2xl">Total:</span>
-                <span className="mt-5 text-2xl text-right">{currencyFormat(order!.total!)}</span>
+              <span className="mt-5 text-2xl">Total:</span>
+              <span className="mt-5 text-2xl text-right">{currencyFormat(order!.total!)}</span>
 
             </div>
 
             <div className="mt-5 mb-2 w-full">
 
-            <PayPalButton/>
+              {order?.isPaid === true
+                ? (
+                  <OrderStatus isPaid={order?.isPaid} />
+                )
+                : (
+                  <PayPalButton amount={order!.total} orderId={order!.id} />
+                )
+              }
 
 
 
